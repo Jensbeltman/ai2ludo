@@ -21,14 +21,22 @@ def cvtPiecePos(pieceI,playerI,playerJ):
 if __name__ == "__main__":
 
 
-    ri = randint(0,57)
+    ri = randint(0,579)
     time_start = time.time()
     for i in range(1000000):
         x=cvtPiecePos(ri,1,1)
     time_end = time.time()
     print(time_end-time_start)
 
-    table = [[i for i in range(580)] for _ in range(3)]
+
+    table = np.arange(580)
+    time_start = time.time()
+    for i in range(1000000):
+        x=table[ri]
+    time_end = time.time()
+    print(time_end-time_start)
+
+    table = [i for i in range(580)]
     time_start = time.time()
     for i in range(1000000):
         x=table[ri]
