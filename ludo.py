@@ -1,4 +1,3 @@
-from typing import List, Set, Dict, Tuple, Optional
 import numpy as np
 from random import randint
 from params import *
@@ -21,7 +20,7 @@ class Player():
        
     def rollDie(self):
         self.die = randint(1,6)
-        
+
 
     def movePiece(self,pieceI,newPieceP=None): # TODO handle stepping over goal
         if newPieceP == None:
@@ -31,9 +30,11 @@ class Player():
         else:
             self.pieces[pieceI]=newPieceP
     
+
     def movePieces(self,pieceIs,newPieceP):
         for pieceI in pieceIs:
             self.movePiece(pieceI,newPieceP) 
+
 
     def moveablePieces(self):
         if self.die==6:
@@ -41,15 +42,6 @@ class Player():
         else:    
             return np.argwhere((0<self.pieces) & (self.pieces<goalI))
 
-    def vulnerablePieces(self): # TODO needs to be updated to inlcude globes and double piece information
-        return np.argwhere((0 < self.pieces) & (self.pieces < goalAreaStartI))
-
-    def allPiecesAtStart(self):
-        return np.any(self.pieces != 0)
-
-    def getNoneSafePieces(self):
-        idxs = np.argwhere(0<self.pieces<54) # not in home or goal area
-        return self.pieces[idxs]
 
     def pieceToMove(self): # TODO dont evaluate twice
         #Chose action/piece based on state and policy
@@ -58,20 +50,24 @@ class Player():
             return np.random.choice(moveablePieces)
         return None
 
+
     def getNextGlobe(self,pieceP):
         for globePos in globeI:
             if globePos > pieceP:
                 return globePos
         return None
     
+
     def getNextStar(self,pieceP):
         for starPos in starI:
             if starPos > pieceP:
                 return starPos
         return None
 
+
     def updateQ(self,reward):
         pass # TODO
+
 
     def cvtPiecePos(self,pieceP,playerI,playerJ):
         if pieceP == 0 or playerI == playerJ:
@@ -91,7 +87,16 @@ class Player():
         return None
             
 
-    
+    # def vulnerablePieces(self): # TODO needs to be updated to inlcude globes and double piece information
+    #     return np.argwhere((0 < self.pieces) & (self.pieces < goalAreaStartI))
+
+    # def allPiecesAtStart(self): #TODO implement this so that player can roll die 3 times when all pieces are at start
+    #     return np.any(self.pieces != 0)
+
+    # def getNoneSafePieces(self):
+    #     idxs = np.argwhere(0<self.pieces<54) # not in home or goal area
+    #     return self.pieces[idxs]
+ 
         
 
 class Game():
@@ -109,8 +114,8 @@ class Game():
         print("Player {} won the game".format(player.playerI))
         return True
 
-    def getCloseEnemys(self,playerI,pieceI):
-        pass # TODO
+    # def getCloseEnemys(self,playerI,pieceI):
+    #     pass # TODO
  
     
     def getCollisions(self,player: Player,newPieceP):
@@ -139,8 +144,6 @@ class Game():
 
    
 
-        
-
     def handleCollision(self,n_col ,player, pieceI, newPieceP, enemy, colPos, colPieceIds):
         if n_col > 1:
             player.movePiece(pieceI,homeI)
@@ -156,7 +159,7 @@ class Game():
         curPieceP = player.pieces[pieceI] 
            
         if curPieceP<goalAreaStartI: # Only check for collisions ,start and globes if piece is not in the goal area
-            if curPieceP == homeI and player.die == 6:
+            if curPieceP == homeI and (player.die == 6 or player.die == globeDie):
                 newPieceP = 1
             elif player.die == globeDie:
                 newPieceP = player.getNextGlobe(curPieceP)
@@ -237,7 +240,7 @@ if __name__ == "__main__":
     times = [0 for i in range(itt)]
     for i in range(itt):
         start = time.time()
-        game.run(True)
+        game.run(saveReplay=True)
         game.reset()
         end = time.time()
         times[i]=end-start

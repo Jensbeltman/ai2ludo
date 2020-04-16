@@ -233,12 +233,6 @@ class LudoApp():
         return data
 
 
-
-
-
-    
-       
-
 if __name__ == "__main__":
     print('test')
     app = LudoApp()
