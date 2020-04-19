@@ -1,5 +1,6 @@
 ##Local indexes
 homeI = 0
+startI = 1
 
 # Goal area
 goalI = 57 # local goal index
@@ -22,12 +23,6 @@ n_pieceParams = 10
 globeDie = 3
 starDie = 5
 
-#Move events
-#None
-#EnemyPiece -> Home
-#MovedPiece -> Home (two enemys)
-#MovedPiece -> Home (enemy on globe)
-#MovedPiece -> Goal Area
-#MovedPiece -> Goal
-#MovedPiece -> Goal(Goal start was hit)
-#Start was hit MovedPiece -> Next start
+sentHomePlayer = 1
+sentHomeEnemy = 2
+
